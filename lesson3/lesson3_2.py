@@ -61,7 +61,7 @@ class Filter:
         # 永遠將輸出覆蓋為 Hello! World!
         for msg in messages:
             if msg.get("role") == "assistant":
-                msg["content"] = "Hello! 徐國堂!💕"
+                msg["content"] = "Hello! 小羊!💕"
         
         
         return body
