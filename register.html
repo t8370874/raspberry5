@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>會員註冊</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+      color: #2d3748;
+    }
+
+    .register-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 32px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 18px 45px rgba(45, 55, 72, 0.25);
+    }
+
+    .register-card h1 {
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 2rem;
+      color: #2b6cb0;
+    }
+
+    .register-card .subtitle {
+      margin-bottom: 28px;
+      text-align: center;
+      color: #718096;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #4a5568;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
+    }
+
+    .hint {
+      display: block;
+      margin-top: 6px;
+      color: #718096;
+      font-size: 0.85rem;
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 8px;
+      color: #e53e3e;
+      font-size: 0.9rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 13px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #2b6cb0;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background: #2c5282;
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-link {
+      margin-top: 22px;
+      text-align: center;
+      color: #718096;
+    }
+
+    .login-link a {
+      color: #2b6cb0;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .register-card {
+        padding: 28px 22px;
+      }
+
+      .register-card h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="register-card" aria-labelledby="register-title">
+    <h1 id="register-title">建立帳號</h1>
+    <p class="subtitle">請填寫以下資料完成會員註冊</p>
+
+    <form id="registerForm" action="/register" method="post">
+      <div class="form-group">
+        <label for="username">使用者名稱</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="請輸入使用者名稱"
+          minlength="3"
+          maxlength="30"
+          autocomplete="username"
+          required
+        />
+        <small class="hint">至少 3 個字元。</small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">電子郵件</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="example@email.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">密碼</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="請輸入密碼"
+          minlength="8"
+          autocomplete="new-password"
+          required
+        />
+        <small class="hint">密碼至少需要 8 個字元。</small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">確認密碼</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirm_password"
+          placeholder="請再次輸入密碼"
+          minlength="8"
+          autocomplete="new-password"
+          required
+        />
+        <p id="passwordError" class="error-message">兩次輸入的密碼不一致，請重新確認。</p>
+      </div>
+
+      <button type="submit" class="submit-btn">註冊</button>
+    </form>
+
+    <p class="login-link">
+      已經有帳號了嗎？ <a href="/login">前往登入</a>
+    </p>
+  </main>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const passwordError = document.getElementById("passwordError");
+
+    function validatePasswordMatch() {
+      const isMatch = password.value === confirmPassword.value;
+
+      if (!isMatch && confirmPassword.value.length > 0) {
+        passwordError.style.display = "block";
+        confirmPassword.setCustomValidity("兩次輸入的密碼不一致");
+      } else {
+        passwordError.style.display = "none";
+        confirmPassword.setCustomValidity("");
+      }
+
+      return isMatch;
+    }
+
+    password.addEventListener("input", validatePasswordMatch);
+    confirmPassword.addEventListener("input", validatePasswordMatch);
+
+    form.addEventListener("submit", function (event) {
+      if (!validatePasswordMatch()) {
+        event.preventDefault();
+        confirmPassword.focus();
+      }
+    });
+  </script>
+</body>
+</html>
